@@ -7,11 +7,11 @@
 void other_commands(char commandName[])
 {
     char *token;
-    char command[PATH_MAX];
-    char tempArray[PATH_MAX][15];
+    char command[PATH_MAX]={'\0'};
+    char tempArray[PATH_MAX][15]={'\0'};
     int i = 0;
     int flag = 0;
-    char *buf[PATH_MAX];
+    char *buf[PATH_MAX]={NULL};
 
 	token = strtok(commandName, " \t");
     if(token == NULL)
@@ -40,7 +40,7 @@ void other_commands(char commandName[])
         if(pid == 0)
         {
             execvp(command, buf);
-            printf("Command not found\n");
+            printf("%s: Command not found\n", commandName);
         }
         else
         {
@@ -55,7 +55,7 @@ void other_commands(char commandName[])
         if(pid == 0)
         {
             execvp(command, buf);
-            printf("Command not found\n");
+            printf("%s: Command not found\n", commandName);
         }
     }
     return;

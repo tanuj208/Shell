@@ -17,10 +17,10 @@ void shell_echo(char *token)
 
 void shell_cd(char *token, char HOME_DIRECTORY[])
 {
+	char output[PATH_MAX]={'\0'};
 	token = strtok(NULL, " \t");
 	if(token == NULL)
 		token = "~";
-	char output[PATH_MAX];
 	strcpy(output, HOME_DIRECTORY);
 
 	if(token[0] == '~')
@@ -35,7 +35,7 @@ void shell_cd(char *token, char HOME_DIRECTORY[])
 
 void shell_pwd()
 {
-	char pathname[PATH_MAX];
+	char pathname[PATH_MAX]={'\0'};
 	getcwd(pathname, sizeof(pathname));
 	printf("%s\n",pathname);
 }

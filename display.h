@@ -4,12 +4,13 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <limits.h>
+#include "definitions.h"
 
 int display(char HOME_DIRECTORY[])
 {
-	char complete_pathname[PATH_MAX];
-	char pathname[PATH_MAX];
-	char hostname[HOST_NAME_MAX];
+	char complete_pathname[PATH_MAX]={'\0'};
+	char pathname[PATH_MAX]={'\0'};
+	char hostname[HOST_NAME_MAX]={'\0'};
 	struct passwd *pw;
 	pw = getpwuid(geteuid());
 
@@ -23,29 +24,7 @@ int display(char HOME_DIRECTORY[])
 		printf("Some error occurred in getting hostname\n");
 		return -1;
 	}
-	int i;
-	int flag = 0;
-	for(i=0;i<strlen(HOME_DIRECTORY);i++)
-	{
-		if(HOME_DIRECTORY[i] != complete_pathname[i])
-		{
-			flag = 1;
-			break;
-		}
-	}
-	if(flag == 0)
-	{
-		pathname[0]='~';
-		int k = 1;
-		for(i=strlen(HOME_DIRECTORY);i<strlen(complete_pathname);i++)
-		{
-			pathname[k] = complete_pathname[i];
-			k++;
-		}
-		pathname[k]='\0';
-	}
-	else
-		strcpy(pathname, complete_pathname);
+	convert(HOME_DIRECTORY, complete_pathname, pathname);
 	if(pw)
 		printf("<%s@%s:%s> ",pw->pw_name, hostname, pathname);
 	else
