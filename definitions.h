@@ -1,5 +1,6 @@
 
 
+// contains definitions of all functions used
 void convert(char HOME_DIRECTORY[], char complete_pathname[], char pathname[]);
 void shell_pinfo(int pid, char HOME_DIRECTORY[]);
 void other_commands(char commandName[]);

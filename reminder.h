@@ -7,6 +7,7 @@ void reminder(char *token)
 {
     int time;
     token = strtok(NULL, " \t");
+    // atoi converts string to integer
     time = atoi(token);
     token = strtok(NULL, "");
     int pid = fork();

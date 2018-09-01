@@ -15,7 +15,7 @@ char HOME_DIRECTORY[PATH_MAX]={'\0'};
 
 int main()
 {
-	getcwd(HOME_DIRECTORY, sizeof(HOME_DIRECTORY));
+	getcwd(HOME_DIRECTORY, sizeof(HOME_DIRECTORY));    // getting the directory where shell.c is present
 	while(1)
 	{
 		char separated_input[15][MAX_INPUT]={'\0'};
@@ -26,16 +26,23 @@ int main()
 		int length = 0;
 		int exit = 0;
 		char *token;
-		// char *tok;
+		int status;
+		int check = waitpid(-1, &status, WNOHANG);
 		int x = display(HOME_DIRECTORY);
+
 		if(x==-1)
 			return 0;
+
+		if(check > 0)
+			if(!WIFEXITED(status))
+				printf("Process with pid %d exited with exit status : %d\n", check, WEXITSTATUS(status));  // checking for process ending abnormally
 
 		fgets(input, MAX_INPUT, stdin);
 
 		input[strlen(input) - 1] = '\0';         // it was "\n" which was causing problems
-		strcpy(duplicate, input);
-
+		strcpy(duplicate, input);           // making duplicate so that original input remains unaffected by strtok
+		
+		// first separating commands on the basis of ; and storing them in separated_input array
 		token = strtok(duplicate, ";");
 		while(token != NULL)
 		{
@@ -45,6 +52,8 @@ int main()
 		}
 		token = NULL;
 		length = i;
+
+		// taking each input one by one and separating them on the basis of spaces/tabs
 		for(i=0;i<length;i++)
 		{
 			strcpy(rest, separated_input[i]);

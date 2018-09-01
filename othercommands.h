@@ -16,6 +16,8 @@ void other_commands(char commandName[])
 	token = strtok(commandName, " \t");
     if(token == NULL)
         return;
+
+    // flag == 1 implies & is used and therefore process is a background process
 	while(token != NULL)
 	{
         if(i == 0)
@@ -34,8 +36,10 @@ void other_commands(char commandName[])
 		token = strtok(NULL, " \t");
         i++;
 	}
+
     if(flag == 0)
     {
+        // if foreground process then waiting till it gets over
         int pid = fork();
         if(pid == 0)
         {
@@ -51,11 +55,22 @@ void other_commands(char commandName[])
     }
     else
     {
+        // if background process then forking it again and after it gets over the new parent will tell us it is over
+        // in first parent process we can execute other commands
         int pid = fork();
         if(pid == 0)
         {
-            execvp(command, buf);
-            printf("%s: Command not found\n", commandName);
+            int pid2 = fork();
+            if(pid2 == 0)
+            {
+                execvp(command, buf);
+                printf("%s: Command not found\n", commandName);
+            }
+            else
+            {
+                wait(NULL);
+                printf("%s with pid %d exited normally\n", commandName, 1 + getpid());
+            }
         }
     }
     return;

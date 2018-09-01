@@ -14,17 +14,20 @@ int display(char HOME_DIRECTORY[])
 	struct passwd *pw;
 	pw = getpwuid(geteuid());
 
+	// getting pathname and converting it to relative pathname using convert function
 	if(getcwd(complete_pathname, sizeof(complete_pathname)) == NULL)
 	{
 		printf("Some error occurred in getting cwd\n");
 		return -1;
 	}
+	// getting systemname
 	if(gethostname(hostname, sizeof(hostname)))
 	{
 		printf("Some error occurred in getting hostname\n");
 		return -1;
 	}
 	convert(HOME_DIRECTORY, complete_pathname, pathname);
+	// getting username
 	if(pw)
 		printf("<%s@%s:%s> ",pw->pw_name, hostname, pathname);
 	else

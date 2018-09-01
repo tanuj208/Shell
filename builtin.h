@@ -6,6 +6,7 @@
 
 void shell_echo(char *token)
 {
+	// tokenizing to handle multiple tabs/spaces in between words
 	token = strtok(NULL, " \t");
 	while(token != NULL)
 	{
@@ -25,6 +26,7 @@ void shell_cd(char *token, char HOME_DIRECTORY[])
 		token = "~";
 	convert_to_tilda(HOME_DIRECTORY, token, output);
 	x = chdir(output);
+	// error handling in case wrong name is entered
 	if(x < 0)
 		printf("%s: No such directory\n", output);
 	return;

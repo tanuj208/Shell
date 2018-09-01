@@ -9,6 +9,7 @@
 #include <grp.h>
 #include <time.h>
 
+// function to handle when lflag is one
 void detailedPrint(char filename[], char printableFilename[])
 {
     struct passwd *pws;
@@ -20,12 +21,15 @@ void detailedPrint(char filename[], char printableFilename[])
     stat(filename, &st);
 
     x = st.st_mode;
+    // checking if file is directory or link or a file
     if(S_ISDIR(x))
         printf("d");
     else if(S_ISREG(x))
         printf("-");
     else
         printf("l");
+
+    // checking read/write/execute permissions for user/group/others
     if(x & S_IRUSR)
         printf("r");
     else
@@ -63,9 +67,11 @@ void detailedPrint(char filename[], char printableFilename[])
     else
         printf("- ");
 
+    // getting username and group owner name
     pws = getpwuid(st.st_uid);
     grp = getgrgid(st.st_gid);
 
+    // getting last modified time and converting it to appropriate format
     strftime(time, sizeof(time), "%b %d %H:%M", localtime(&st.st_mtime));     // localtime converts datatype time_t to tm and strftime converts it into required format
 
     printf("%d %s %s %d %s %s\n",(int)st.st_nlink, pws -> pw_name, grp -> gr_name, (int)st.st_size, time, printableFilename);
@@ -78,15 +84,16 @@ void print(char *name, int aflag, int lflag)
     struct stat st = {0};
     if(name == NULL)
         name = ".";
+    // checking if name consists name of a directory or a file
     stat(name, &st);
     if(S_ISDIR(st.st_mode))
         isDirectory = 1;
-    // printf("%d\n", isDirectory);
     if(isDirectory)
     {
         char duplicate[PATH_MAX]={'\0'};
         DIR *d;
         struct dirent *dir;
+        // if last character is not '/' then appending string with '/'
         if(name[strlen(name) - 1] != '/')
         {
             int sz = strlen(name);
@@ -101,7 +108,7 @@ void print(char *name, int aflag, int lflag)
         if(d && lflag == 0)
         {
             while ((dir = readdir(d)) != NULL)
-                if((dir -> d_name[0] == '.' && aflag == 1) || (dir -> d_name[0] != '.'))
+                if((dir -> d_name[0] == '.' && aflag == 1) || (dir -> d_name[0] != '.'))   // if hidden then show only if aflag is one
                     printf("%s\n", dir->d_name);
             closedir(d);
         }
@@ -152,6 +159,7 @@ void shell_ls(char command[], char HOME_DIRECTORY[])
         i++;
 	}
     length = i;
+    // using getopt to detect whether -l or -a flags are used in command
     while((c = getopt(length, commands, "la")) != -1)
     {
         switch (c)
@@ -166,6 +174,7 @@ void shell_ls(char command[], char HOME_DIRECTORY[])
                 return;
         }
     }
+    // checking for each word in command and if it is directory/file/link then printing info about it
     for(i = 0;i < length;i++)
     {
         if(strcmp(commands[i], "ls") && (commands[i][0] != '-' || strlen(commands[i]) == 1))
@@ -184,6 +193,7 @@ void shell_ls(char command[], char HOME_DIRECTORY[])
             }
         }
     }
+    // if no directory/file/link name is written after ls then printing info about all files in current directory
     if(flag == 0)
         print(NULL, aflag, lflag);
     return;

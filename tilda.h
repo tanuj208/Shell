@@ -1,6 +1,6 @@
 #include <string.h>
 
-// changes string according to tilda and store pathname in 'pathname'
+// changes pathname to relative pathname
 void convert(char HOME_DIRECTORY[], char complete_pathname[], char pathname[])
 {
     int i;
@@ -28,6 +28,7 @@ void convert(char HOME_DIRECTORY[], char complete_pathname[], char pathname[])
 		strcpy(pathname, complete_pathname);
 }
 
+// changes relative pathname to complete pathname
 void convert_to_tilda(char HOME_DIRECTORY[], char pathname[], char complete_pathname[])
 {
 	strcpy(complete_pathname, HOME_DIRECTORY);

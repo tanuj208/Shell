@@ -25,11 +25,13 @@ void shell_pinfo(int pid, char HOME_DIRECTORY[])
     strcat(path, "/stat");
 
     fp = fopen(path, "r");
+    // error handling in case pid entered is invalid
     if(fp == NULL)
     {
         printf("There is no process with pid %d\n", pid);
         return;
     }
+    // third word of stat file contains current status of process
     fscanf(fp, "%s %s %s", tmp1, tmp2, status);
 
     strcpy(path, copy);
@@ -40,10 +42,12 @@ void shell_pinfo(int pid, char HOME_DIRECTORY[])
         printf("There is no process with pid %d\n", pid);
         return;
     }
+    // first word of statm file contains virtual memory used
     fscanf(fp, "%s", memory);
 
     strcpy(path, copy);
     strcat(path, "/exe");
+    // readlink reads the symlink exe which is pointed to executable path of process
     readlink(path, exepath, sizeof(exepath));
     convert(HOME_DIRECTORY, exepath, exePath);
 
