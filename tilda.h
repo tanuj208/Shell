@@ -27,3 +27,13 @@ void convert(char HOME_DIRECTORY[], char complete_pathname[], char pathname[])
 	else
 		strcpy(pathname, complete_pathname);
 }
+
+void convert_to_tilda(char HOME_DIRECTORY[], char pathname[], char complete_pathname[])
+{
+	strcpy(complete_pathname, HOME_DIRECTORY);
+	if(pathname[0] == '~')
+		strcat(complete_pathname, pathname + 1);
+	else
+		strcpy(complete_pathname, pathname);
+	return;
+}

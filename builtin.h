@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
+#include "definitions.h"
 
 void shell_echo(char *token)
 {
@@ -17,19 +18,15 @@ void shell_echo(char *token)
 
 void shell_cd(char *token, char HOME_DIRECTORY[])
 {
+	int x;
 	char output[PATH_MAX]={'\0'};
 	token = strtok(NULL, " \t");
 	if(token == NULL)
 		token = "~";
-	strcpy(output, HOME_DIRECTORY);
-
-	if(token[0] == '~')
-	{
-		strcat(output, token + 1);
-		chdir(output);
-	}
-	else
-		chdir(token);
+	convert_to_tilda(HOME_DIRECTORY, token, output);
+	x = chdir(output);
+	if(x < 0)
+		printf("%s: No such directory\n", output);
 	return;
 }
 

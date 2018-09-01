@@ -8,4 +8,5 @@ void reminder(char *token);
 void shell_echo(char *token);
 void shell_cd(char *token, char HOME_DIRECTORY[]);
 void shell_pwd();
+void convert_to_tilda(char HOME_DIRECTORY[], char pathname[], char complete_pathname[]);
 

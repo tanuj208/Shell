@@ -24,6 +24,7 @@ int main()
 		char duplicate[MAX_INPUT]={'\0'};
 		int i = 0;
 		int length = 0;
+		int exit = 0;
 		char *token;
 		// char *tok;
 		int x = display(HOME_DIRECTORY);
@@ -56,7 +57,10 @@ int main()
 			else if(!strcmp(token, "pwd"))
 				shell_pwd();
 			else if(!strcmp(token, "exit"))
+			{
+				exit = 1;
 				break;
+			}
 			else if(!strcmp(token, "remindme"))
 				reminder(token);
 			else if(!strcmp(token, "pinfo"))
@@ -68,10 +72,12 @@ int main()
 					shell_pinfo(getpid(), HOME_DIRECTORY);
 			}
 			else if(!strcmp(token, "ls"))
-				shell_ls(separated_input[i]);
+				shell_ls(separated_input[i], HOME_DIRECTORY);
 			else
 				other_commands(separated_input[i]);
 		}
+		if(exit == 1)
+			break;
 	}
 	return 0;
 }
