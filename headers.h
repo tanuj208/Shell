@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#include <unistd.h>
+#include <limits.h>
+#include <time.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <ctype.h>
+#include <pwd.h>
+#include <grp.h>
+#include <fcntl.h>
+#include "definitions.h"

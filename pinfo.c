@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <limits.h>
-#include <string.h>
-#include <fcntl.h>
-#include "definitions.h"
+#include "headers.h"
 
 void shell_pinfo(int pid, char HOME_DIRECTORY[])
 {

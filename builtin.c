@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <limits.h>
-#include "definitions.h"
+#include "headers.h"
 
 void shell_echo(char *token)
 {

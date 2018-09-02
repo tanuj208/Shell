@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <limits.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include "headers.h"
 
 void other_commands(char commandName[])
 {

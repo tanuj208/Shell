@@ -1,4 +1,4 @@
-#include <string.h>
+#include "headers.h"
 
 // changes pathname to relative pathname
 void convert(char HOME_DIRECTORY[], char complete_pathname[], char pathname[])

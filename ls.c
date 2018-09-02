@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <dirent.h>
-#include <string.h>
-#include <ctype.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <pwd.h>
-#include <grp.h>
-#include <time.h>
+#include "headers.h"
 
 // function to handle when lflag is one
 void detailedPrint(char filename[], char printableFilename[])

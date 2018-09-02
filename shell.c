@@ -1,20 +1,10 @@
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <limits.h>
-#include <stdlib.h>
-#include "builtin.h"
-#include "display.h"
-#include "othercommands.h"
-#include "reminder.h"
-#include "pinfo.h"
-#include "tilda.h"
-#include "ls.h"
+#include "headers.h"
 
 char HOME_DIRECTORY[PATH_MAX]={'\0'};
 
 int main()
 {
+	signal(SIGINT, SIG_IGN);
 	getcwd(HOME_DIRECTORY, sizeof(HOME_DIRECTORY));    // getting the directory where shell.c is present
 	while(1)
 	{
@@ -82,6 +72,8 @@ int main()
 			}
 			else if(!strcmp(token, "ls"))
 				shell_ls(separated_input[i], HOME_DIRECTORY);
+			else if(!strcmp(token, "clock"))
+				shell_clock(token);
 			else
 				other_commands(separated_input[i]);
 		}
