@@ -65,7 +65,8 @@ void other_commands(char commandName[])
             else
             {
                 wait(NULL);
-                printf("%s with pid %d exited normally\n", commandName, 1 + getpid());
+                printf("%s with pid %d exited\n", commandName, 1 + getpid());
+                exit(0);
             }
         }
     }

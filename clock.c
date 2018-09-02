@@ -65,13 +65,20 @@ void shell_clock(char* token)
 	        signal(SIGINT, SIG_DFL);
             if(time(NULL) - initial_time >= nflag)
                 break;
-            time_t time_now = time(NULL);
-            char clock[50] = {'\0'};
-            strftime(clock, sizeof(clock), "%c", localtime(&time_now));     // localtime converts datatype time_t to tm and strftime converts it into required format
-            printf("%s\n", clock);
+            char path[20] = "/proc/driver/rtc";
+            char clock[50]={'\0'};
+            FILE *fp = fopen(path, "r");
+            for(i=0;i<6;i++)
+            {
+                fscanf(fp, "%s", clock);
+                if(i == 2 || i == 5)
+                    printf("%s ", clock);
+            }
+            printf("\n");
             if(nflag + initial_time - time(NULL) <= tflag)
-                break;
-            sleep(tflag);
+                sleep(nflag + initial_time - time(NULL));
+            else
+                sleep(tflag);
         }
         kill(getpid(), SIGQUIT);
     }

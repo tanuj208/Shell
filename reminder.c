@@ -12,7 +12,7 @@ void reminder(char *token)
     {
         sleep(time);
         printf("%s\n", token);
-        return;
+        exit(0);
     }
     return;
 }
