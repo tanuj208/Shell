@@ -14,6 +14,7 @@ int redirection_and_pipe(char **command, char HOME_DIRECTORY[])
     int wrt = 1;
     int flag = 0;
     int anotherFlag = 0;
+    int ekaurFlag = 0;
 
     while(command[i] != NULL)
     {
@@ -58,7 +59,7 @@ int redirection_and_pipe(char **command, char HOME_DIRECTORY[])
     // printf("%d %d %d\n", pipes, input_redirection, output_redirection);
 
     int pip[2*pipes + 2];
-    for(i = 0;i < pipes; i += 2)
+    for(i = 0;i < 2*pipes; i += 2)
         pipe(pip + i);
     i = 0;
 
@@ -190,13 +191,15 @@ int redirection_and_pipe(char **command, char HOME_DIRECTORY[])
         if(!strcmp(command[i], "|") && flag == 1)
         {
             pipes--;
-            if(anotherFlag == 1)
+            if(ekaurFlag == 0 && anotherFlag == 1)
+                ekaurFlag = 1;
+            else if(anotherFlag == 1)
             {
+                wrt += 2;
                 if(fork() == 0)
                 {
                     commands[j] = NULL;
-                    int x = dup2(pip[wrt - 1], 0);
-                    wrt += 2;
+                    int x = dup2(pip[wrt - 3], 0);
                     int y = dup2(pip[wrt], 1);
                     close(pip[wrt - 1]);
                     close(pip[wrt - 2]);
@@ -214,6 +217,7 @@ int redirection_and_pipe(char **command, char HOME_DIRECTORY[])
             else
             {
                 anotherFlag = 1;
+                ekaurFlag = 1;
                 if(fork() == 0)
                 {
                     commands[j] = NULL;
