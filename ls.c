@@ -81,7 +81,7 @@ void print(char *name, int aflag, int lflag)
         isDirectory = 1;
     if(isDirectory)
     {
-        char duplicate[PATH_MAX]={'\0'};
+        char duplicate[PATH_MAX] = {'\0'};
         DIR *d;
         struct dirent *dir;
         // if last character is not '/' then appending string with '/'
@@ -126,13 +126,11 @@ void print(char *name, int aflag, int lflag)
     return;
 }
 
-void shell_ls(char command[], char HOME_DIRECTORY[])
+void shell_ls(char **commands, char HOME_DIRECTORY[])
 {
-    char *token = NULL;
     int aflag = 0;
     int lflag = 0;
-    char *commands[15]={NULL};
-    char tempArray[15][PATH_MAX]={'\0'};
+    char tempArray[15][PATH_MAX] = {'\0'};
     int i = 0;
     int length;
     int c;
@@ -140,16 +138,10 @@ void shell_ls(char command[], char HOME_DIRECTORY[])
     extern int optind;
     int flag = 0;
     optind = 0;
-
-	token = strtok(command, " \t");
-	while(token != NULL)
-	{
-        strcpy(tempArray[i], token);
-        commands[i] = tempArray[i];
-		token = strtok(NULL, " \t");
+    while(commands[i]!=NULL)
         i++;
-	}
     length = i;
+
     // using getopt to detect whether -l or -a flags are used in command
     while((c = getopt(length, commands, "la")) != -1)
     {

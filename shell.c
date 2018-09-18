@@ -14,7 +14,6 @@ int main()
 		char duplicate[MAX_INPUT]={'\0'};
 		int i = 0;
 		int length = 0;
-		int exit = 0;
 		char *token;
 		int status;
 		int check = waitpid(-1, &status, WNOHANG);
@@ -42,42 +41,29 @@ int main()
 		}
 		token = NULL;
 		length = i;
+		int ex = 0;
 
 		// taking each input one by one and separating them on the basis of spaces/tabs
 		for(i=0;i<length;i++)
 		{
 			strcpy(rest, separated_input[i]);
-			token = strtok(rest, " \t");
+			char **commands=(char **)malloc(1024);
+			int j = 0;
 
-			if(!strcmp(token, "echo"))
-				shell_echo(token);
-			else if(!strcmp(token, "cd"))
-				shell_cd(token, HOME_DIRECTORY);
-			else if(!strcmp(token, "pwd"))
-				shell_pwd();
-			else if(!strcmp(token, "exit"))
+			token = strtok(rest, " \t");
+			while(token!=NULL)
 			{
-				exit = 1;
-				break;
-			}
-			else if(!strcmp(token, "remindme"))
-				reminder(token);
-			else if(!strcmp(token, "pinfo"))
-			{
+				commands[j] = token;
 				token = strtok(NULL, " \t");
-				if(token != NULL)
-					shell_pinfo(atoi(token), HOME_DIRECTORY);
-				else
-					shell_pinfo(getpid(), HOME_DIRECTORY);
+				j++;
 			}
-			else if(!strcmp(token, "ls"))
-				shell_ls(separated_input[i], HOME_DIRECTORY);
-			else if(!strcmp(token, "clock"))
-				shell_clock(token);
-			else
-				other_commands(separated_input[i]);
+			commands[j] = NULL;
+
+			ex = redirection_and_pipe(commands, HOME_DIRECTORY);
+			if(ex == 1)
+				break;
 		}
-		if(exit == 1)
+		if(ex == 1)
 			break;
 	}
 	return 0;

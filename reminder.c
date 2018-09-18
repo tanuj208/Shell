@@ -1,17 +1,29 @@
 #include "headers.h"
 
-void reminder(char *token)
+void reminder(char **command)
 {
     int time;
-    token = strtok(NULL, " \t");
+    int i;
+    if(command[1] == NULL || command[2] == NULL)
+    {
+        printf("Usage remindme <number> <message>\n");
+        return;
+    }
+    for(i=0;i<strlen(command[1]);i++)
+    {
+        if(command[1][i] < '0' || command[1][i] > '9')
+        {
+            printf("Usage remindme <number> <message>\n");
+            return;
+        }
+    }
     // atoi converts string to integer
-    time = atoi(token);
-    token = strtok(NULL, "");
+    time = atoi(command[1]);
     int pid = fork();
     if(pid == 0)
     {
         sleep(time);
-        printf("%s\n", token);
+        printf("%s\n", command[2]);
         exit(0);
     }
     return;

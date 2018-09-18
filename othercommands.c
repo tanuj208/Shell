@@ -1,35 +1,23 @@
 #include "headers.h"
 
-void other_commands(char commandName[])
+void other_commands(char **commandName)
 {
-    char *token;
-    char command[PATH_MAX]={'\0'};
-    char tempArray[PATH_MAX][15]={'\0'};
     int i = 0;
     int flag = 0;
-    char *buf[PATH_MAX]={NULL};
+    char *buf[PATH_MAX] = {NULL};
 
-	token = strtok(commandName, " \t");
-    if(token == NULL)
+    if(commandName[0] == NULL)
         return;
 
     // flag == 1 implies & is used and therefore process is a background process
-	while(token != NULL)
+	while(commandName[i] != NULL)
 	{
-        if(i == 0)
-        {
-            strcpy(command, token);
-            command[strlen(token)] = '\0';
-        }
-        strcpy(tempArray[i], token);
-        tempArray[i][strlen(token)] = '\0';
-        if(!strcmp(token, "&"))
+        if(commandName[i][0] == '&')
         {
             flag = 1;
             break;
         }
-        buf[i] = tempArray[i];
-		token = strtok(NULL, " \t");
+        buf[i] = commandName[i];
         i++;
 	}
 
@@ -39,8 +27,10 @@ void other_commands(char commandName[])
         int pid = fork();
         if(pid == 0)
         {
-            execvp(command, buf);
-            printf("%s: Command not found\n", commandName);
+            signal(SIGINT, SIG_DFL);
+            execvp(buf[0], buf);
+            printf("%s: Command not found\n", buf[0]);
+            exit(0);
         }
         else
         {
@@ -59,13 +49,15 @@ void other_commands(char commandName[])
             int pid2 = fork();
             if(pid2 == 0)
             {
-                execvp(command, buf);
-                printf("%s: Command not found\n", commandName);
+                signal(SIGINT, SIG_DFL);
+                execvp(buf[0], buf);
+                printf("%s: Command not found\n", buf[0]);
+                exit(0);
             }
             else
             {
                 wait(NULL);
-                printf("%s with pid %d exited\n", commandName, 1 + getpid());
+                printf("%s with pid %d exited\n", buf[0], 1 + getpid());
                 exit(0);
             }
         }

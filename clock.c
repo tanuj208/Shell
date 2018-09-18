@@ -1,56 +1,53 @@
 #include "headers.h"
 
-void shell_clock(char* token)
+void shell_clock(char** command)
 {
-    int i;
+    int i,j = 1;
     int tflag = 0;        // for interval
     int nflag = 0;          // for duration
     // flag == 1 -> argument for number of seconds in pending
-    token = strtok(NULL, " \t");
-    while(token != NULL)
+    while(command[j] != NULL)
     {
-        // printf("%s\n", token);
-        if(!strcmp(token, "-t"))
+        if(!strcmp(command[j], "-t"))
         {
             if(tflag != 0 || nflag == 1)
             {
-                printf("Usage: clock -t <interval> -n <duration>\n");
+                perror("Usage: clock -t <interval in digits> -n <duration in digits>\n");
                 return;
             }
             tflag++;
-            token = strtok(NULL, " \t");
+            j++;
             continue;
         }
-        if(!strcmp(token, "-n"))
+        if(!strcmp(command[j], "-n"))
         {
-            // printf("Fuck\n");
             if(nflag != 0 || tflag == 1)
             {
-                printf("Usage: clock -t <interval> -n <duration>\n");
+                perror("Usage: clock -t <interval in digits> -n <duration in digits>\n");
                 return;
             }
             nflag++;
-            token = strtok(NULL, " \t");
+            j++;
             continue;
         }
         if((tflag == 1 && nflag == 1) || (tflag != 1 && nflag != 1))
         {
-            printf("Usage: clock -t <interval> -n <duration>\n");
+            perror("Usage: clock -t <interval in digits> -n <duration in digits>\n");
             return;
         }
-        for(i=0;i<strlen(token);i++)
+        for(i = 0;i < strlen(command[j]);i++)
         {
-            if(token[i] > '9' || token[i] < '0')
+            if(command[j][i] > '9' || command[j][i] < '0')
             {
-                printf("Usage: clock -t <interval> -n <duration>\n");
+                perror("Usage: clock -t <interval in digits> -n <duration in digits>\n");
                 return;
             }
         }
         if(tflag == 1)
-            tflag = atoi(token);
+            tflag = atoi(command[j]);
         else
-            nflag = atoi(token);
-        token = strtok(NULL, " \t");
+            nflag = atoi(command[j]);
+        j++;
     }
     time_t initial_time = time(NULL);
     int pid = fork();
@@ -66,9 +63,9 @@ void shell_clock(char* token)
             if(time(NULL) - initial_time >= nflag)
                 break;
             char path[20] = "/proc/driver/rtc";
-            char clock[50]={'\0'};
+            char clock[50] = {'\0'};
             FILE *fp = fopen(path, "r");
-            for(i=0;i<6;i++)
+            for(i = 0;i < 6;i++)
             {
                 fscanf(fp, "%s", clock);
                 if(i == 2 || i == 5)

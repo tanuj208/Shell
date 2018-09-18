@@ -2,9 +2,9 @@
 
 int display(char HOME_DIRECTORY[])
 {
-	char complete_pathname[PATH_MAX]={'\0'};
-	char pathname[PATH_MAX]={'\0'};
-	char hostname[HOST_NAME_MAX]={'\0'};
+	char complete_pathname[PATH_MAX] = {'\0'};
+	char pathname[PATH_MAX] = {'\0'};
+	char hostname[HOST_NAME_MAX] = {'\0'};
 	struct passwd *pw;
 	pw = getpwuid(geteuid());
 
