@@ -15,6 +15,9 @@ int interpretCommands(char ** commands, char HOME_DIRECTORY[], int processes[], 
 
 	else if(!strcmp(commands[0], "exit"))
 		exit = 1;
+	
+	else if(!strcmp(commands[0], "quit"))
+		exit = 1;
 
 	else if(!strcmp(commands[0], "remindme"))
 		reminder(commands);
