@@ -23,7 +23,7 @@ int display(char HOME_DIRECTORY[])
 	convert(HOME_DIRECTORY, complete_pathname, pathname);
 	// getting username
 	if(pw)
-		printf("<%s@%s:%s> ",pw->pw_name, hostname, pathname);
+		printf("\x1b[1;32m" "<%s@%s:" "\x1b[1;34m" "%s>" "\x1b[1;37m ",pw->pw_name, hostname, pathname);
 	else
 	{
 		printf("Some error occurred in getting username\n");

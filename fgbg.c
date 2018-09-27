@@ -45,24 +45,24 @@ void shell_fg(char ** command, int processes[], int *sz_proc)
             continue;
         if(cntr == jobnumber)
         {
-            int val = processes[i];
+            int current_pid = processes[i];
             processes[i] = -1;
             int status;
             signal(SIGINT, signalHandler22);
             signal(SIGTSTP, anotherSignalHandler22);
-            kill(val, SIGCONT);
-            while(waitpid(val, &status, WNOHANG) != val)
+            kill(current_pid, SIGCONT);
+            while(waitpid(current_pid, &status, WNOHANG) != current_pid)
             {
                 if(signalFlag22 == 1)
                 {
-                    kill(val, SIGINT);
+                    kill(current_pid, SIGINT);
                     signalFlag22 = 0;
                     break;
                 }
                 if(anotherSignalFlag22 == 1)
                 {
-                    kill(val,SIGSTOP);
-                    processes[*sz_proc] = val;
+                    kill(current_pid,SIGSTOP);
+                    processes[*sz_proc] = current_pid;
                     (*sz_proc)++;
                     anotherSignalFlag22 = 0;
                     break;

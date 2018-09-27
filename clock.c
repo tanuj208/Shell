@@ -70,7 +70,10 @@ void shell_clock(char** command)
         {
             signal(SIGINT, signalHandler1);
             if(signalFlag1 == 1)
+            {
+                signalFlag1 = 0;
                 break;
+            }
             if(time(NULL) - initial_time >= nflag)
                 break;
             char path[20] = "/proc/driver/rtc";

@@ -52,6 +52,7 @@ void other_commands(char **commandName, int processes[], int *sz_proc)
             {
                 processes[*sz_proc] = pid;
                 (*sz_proc)++;
+                anotherSignalFlag = 0;
             }
         }
     }
