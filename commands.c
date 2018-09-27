@@ -1,6 +1,6 @@
 #include "headers.h"
 
-int interpretCommands(char ** commands, char HOME_DIRECTORY[])
+int interpretCommands(char ** commands, char HOME_DIRECTORY[], int processes[], int *sz_proc)
 {
     int exit = 0;
 
@@ -33,7 +33,28 @@ int interpretCommands(char ** commands, char HOME_DIRECTORY[])
 	else if(!strcmp(commands[0], "clock"))
 		shell_clock(commands);
 
+	else if(!strcmp(commands[0], "setenv"))
+		setenvir(commands);
+
+	else if(!strcmp(commands[0], "unsetenv"))
+		unsetenvir(commands);
+
+	else if(!strcmp(commands[0], "jobs"))
+		shell_jobs(commands, processes);
+
+	else if(!strcmp(commands[0], "kjobs"))
+		shell_kjobs(commands, processes);
+
+	else if(!strcmp(commands[0], "fg"))
+		shell_fg(commands, processes, sz_proc);
+
+	else if(!strcmp(commands[0], "bg"))
+		shell_bg(commands, processes);
+
+	else if(!strcmp(commands[0], "overkill"))
+		shell_overkill(commands, processes);
+
 	else
-		other_commands(commands);
+		other_commands(commands, processes, sz_proc);
     return exit;
 }

@@ -1,6 +1,6 @@
 #include "headers.h"
 
-int redirection_and_pipe(char **command, char HOME_DIRECTORY[])
+int redirection_and_pipe(char **command, char HOME_DIRECTORY[], int processes[], int *sz_proc)
 {
     int i = 0;
     int j = 0;
@@ -55,7 +55,7 @@ int redirection_and_pipe(char **command, char HOME_DIRECTORY[])
     }
 
     if(pipes == 0 && input_redirection == 0 && output_redirection == 0)
-        return interpretCommands(command, HOME_DIRECTORY);
+        return interpretCommands(command, HOME_DIRECTORY, processes, sz_proc);
     // printf("%d %d %d\n", pipes, input_redirection, output_redirection);
 
     int pip[2*pipes + 2];
@@ -73,7 +73,10 @@ int redirection_and_pipe(char **command, char HOME_DIRECTORY[])
         if(input_redirection == 1)
         {
             if(!strcmp(command[i], "|"))
+            {
+                pipes--;
                 j = 0;
+            }
             if(!strcmp(command[i], "<"))
             {
                 flag = 1;

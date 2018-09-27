@@ -1,10 +1,19 @@
 #include "headers.h"
 
+int signalFlag1 = 0;
+
+void signalHandler1(int sig)
+{
+    signalFlag1 = 1;
+    return;
+}
+
 void shell_clock(char** command)
 {
     int i,j = 1;
     int tflag = 0;        // for interval
     int nflag = 0;          // for duration
+    signalFlag1 = 0;
     // flag == 1 -> argument for number of seconds in pending
     while(command[j] != NULL)
     {
@@ -59,7 +68,9 @@ void shell_clock(char** command)
             tflag = 1;
         while(1)
         {
-	        signal(SIGINT, SIG_DFL);
+            signal(SIGINT, signalHandler1);
+            if(signalFlag1 == 1)
+                break;
             if(time(NULL) - initial_time >= nflag)
                 break;
             char path[20] = "/proc/driver/rtc";
