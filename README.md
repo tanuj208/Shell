@@ -30,7 +30,7 @@ Owner: Tanuj Garg
 - Go to the working directory and run `make`
 - Use `./shell` to start shell
 
-## Go packages used:
+## Description of all files:
 - builtin.c
 	- echo
 	- pwd
