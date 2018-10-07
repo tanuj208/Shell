@@ -152,44 +152,41 @@ int redirection_and_pipe(char **command, char HOME_DIRECTORY[], int processes[],
         }
         if((!strcmp(command[i], ">") || !strcmp(command[i], ">>")) && pipePresent == 1)
         {
-            if(pipes == 0)
+            if(fork() == 0)
             {
-                if(fork() == 0)
+                int fd;
+                int x = dup2(pip[wrt - 1], 0);
+                close(pip[wrt]);
+                if(append == 0)
                 {
-                    int fd;
-                    int x = dup2(pip[wrt - 1], 0);
-                    close(pip[wrt]);
-                    if(append == 0)
+                    fd = open(outputFile, O_WRONLY | O_TRUNC | O_CREAT ,0644);
+                    if(fd < 0)
                     {
-                        fd = open(outputFile, O_WRONLY | O_TRUNC | O_CREAT ,0644);
-                        if(fd < 0)
-                        {
-                            printf("Cannot access '%s': No such file or directory\n", outputFile);
-                            exit(0);
-                        }
+                        printf("Cannot access '%s': No such file or directory\n", outputFile);
+                        exit(0);
                     }
-                    else
-                    {
-                        fd = open(outputFile, O_WRONLY | O_APPEND | O_CREAT ,0644);
-                        if(fd < 0)
-                        {
-                            printf("Cannot access '%s': No such file or directory\n", outputFile);
-                            exit(0);
-                        }
-                    }
-                    int y = dup2(fd, 1);
-                    commands[j] = NULL;
-                    execvp(commands[0], commands);
-                    printf("%s: Command not found\n", commands[0]);
-                    exit(0);
                 }
                 else
                 {
-                    wait(NULL);
-                    close(pip[wrt - 1]);
+                    fd = open(outputFile, O_WRONLY | O_APPEND | O_CREAT ,0644);
+                    if(fd < 0)
+                    {
+                        printf("Cannot access '%s': No such file or directory\n", outputFile);
+                        exit(0);
+                    }
                 }
-                return 0;
+                int y = dup2(fd, 1);
+                commands[j] = NULL;
+                execvp(commands[0], commands);
+                printf("%s: Command not found\n", commands[0]);
+                exit(0);
             }
+            else
+            {
+                wait(NULL);
+                close(pip[wrt - 1]);
+            }
+            return 0;
         }
         if(!strcmp(command[i], "|") && flag == 1)
         {
